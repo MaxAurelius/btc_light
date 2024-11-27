@@ -1,11 +1,6 @@
 from src.wallet import Wallet
 from src.transactions import Transaction
 
-# scripts/main.py
-
-from src.wallet import Wallet
-from src.transactions import Transaction
-
 def main():
     # Initialize wallets for Alice and Bob
     alice_wallet = Wallet()

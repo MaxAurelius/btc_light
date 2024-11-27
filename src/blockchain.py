@@ -1,4 +1,3 @@
-# src/blockchain.py
 from typing import List
 from transactions import Transaction
 
