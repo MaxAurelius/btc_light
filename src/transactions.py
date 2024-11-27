@@ -18,13 +18,13 @@ class Transaction:
     def __init__(
             self,
             sender_address:str,
-            receipient_address:str,
+            recipient_address:str,
             amount:float,
             signature: Optional[bytes] = None,
             ) -> None:
         
         self.sender_address: str = sender_address
-        self.receipient_address: str = receipient_address
+        self.recipient_address: str = recipient_address
         self.amount: float = amount
         self.signature: Optional[bytes] = signature
 
@@ -37,7 +37,7 @@ class Transaction:
         """
         return {
             'sender_address': self.sender_address,
-            'receipient_address': self.receipient_address,
+            'recipient_address': self.recipient_address,
             'amount': self.amount
         }
     
@@ -48,7 +48,22 @@ class Transaction:
         Args:
             private_key (bytes): The sender's private key for signing the transaction.
         """
-        pass  # TODO
+        
+        if self.sender_address is None:
+            ValueError("Sender address is required to sign a transaction.")
+
+        transaction_data = json.dumps(self.to_dict(), sort_keys=True).encode()
+
+        try:
+            signature = private_key.sign(
+                transaction_data,
+                ec.ECDSA(hashes.SHA256())
+            )
+            
+            self.signature = signature
+        except:
+            ValueError("Unable to sign transaction.")
+
 
     def verify_signature(self) -> bool:
         """
@@ -57,4 +72,27 @@ class Transaction:
         Returns:
             bool: True if the signature is valid, False otherwise.
         """
-        pass  # TODO
+        if self.signature is None:
+            print("No signature found for this transaction.")
+            return False
+
+        # Serialize the transaction data
+        transaction_data = json.dumps(self.to_dict(), sort_keys=True).encode()
+
+        try:
+            # Load the sender's public key from the sender_address
+            public_key = serialization.load_pem_public_key(
+                self.sender_address.encode()
+            )
+
+            # Verify the signature
+            public_key.verify(
+                self.signature,
+                transaction_data,
+                ec.ECDSA(hashes.SHA256())
+            )
+            return True
+        
+        except (InvalidSignature, ValueError) as e:
+            print(f"Signature verification failed: {e}")
+            return False
