@@ -1,5 +1,9 @@
 from src.wallet import Wallet
 from src.transactions import Transaction
+from src.block import Block
+from src.blockchain import Blockchain
+
+from datetime import datetime, timezone
 
 def main():
     # Initialize wallets for Alice and Bob
@@ -27,6 +31,19 @@ def main():
         print("Transaction has been successfully signed and verified.")
     else:
         print("Transaction signature is invalid.")
+
+    # Create a block
+    block = Block(
+        index=1,
+        transactions=[transaction],
+        timestamp=datetime.now(timezone.utc).isoformat(),
+        prev_hash='0'
+    )
+
+    difficulty = 5
+    block.mine_block(difficulty)
+
+    print(f"Block hash {block.hash}")
 
 if __name__ == "__main__":
     main()

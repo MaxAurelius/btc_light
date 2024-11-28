@@ -1,64 +1,10 @@
+from .transactions import Transaction
+from .block import Block
+
+import json
 from typing import List
-from transactions import Transaction
+import hashlib
 
-
-class Block:
-    """
-    Represents a single block within the blockchain.
-
-    Attributes:
-        index (int): The position of the block in the blockchain.
-        transactions (List[Transaction]): A list of transactions included in the block.
-        timestamp (float): The time at which the block was created.
-        previous_hash (str): The hash of the previous block in the blockchain.
-        nonce (int): The nonce used for Proof of Work.
-        hash (str): The current block's hash.
-    """
-
-    def __init__(
-        self,
-        index: int,
-        transactions: List[Transaction],
-        timestamp: float,
-        previous_hash: str,
-        nonce: int = 0,
-        hash: str = "",
-    ) -> None:
-        """
-        Initializes a new block.
-
-        Args:
-            index (int): The position of the block in the blockchain.
-            transactions (List[Transaction]): A list of transactions included in the block.
-            timestamp (float): The time at which the block was created.
-            previous_hash (str): The hash of the previous block in the blockchain.
-            nonce (int, optional): The nonce used for Proof of Work. Defaults to 0.
-            hash (str, optional): The current block's hash. Defaults to an empty string.
-        """
-        self.index: int = index
-        self.transactions: List[Transaction] = transactions
-        self.timestamp: float = timestamp
-        self.previous_hash: str = previous_hash
-        self.nonce: int = nonce
-        self.hash: str = hash
-
-    def calculate_hash(self) -> str:
-        """
-        Calculates the SHA-256 hash of the block's contents.
-
-        Returns:
-            str: The computed hash of the block.
-        """
-        pass  # Implementation will go here
-
-    def mine_block(self, difficulty: int) -> None:
-        """
-        Mines the block by finding a nonce that results in a hash meeting the difficulty criteria.
-
-        Args:
-            difficulty (int): The number of leading zeros required in the block's hash.
-        """
-        pass  # Implementation will go here
 
 class Blockchain:
     """
