@@ -41,7 +41,7 @@ class Transaction:
             'amount': self.amount
         }
     
-    def sign_transaction(self, private_key: bytes) -> None:
+    def sign_transaction(self, private_key: ec.EllipticCurvePrivateKey) -> None:
         """
         Signs the transaction using the sender's private key.
 
