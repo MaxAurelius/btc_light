@@ -113,9 +113,20 @@ class Blockchain:
         Args:
             transaction (Transaction): The transaction to be added.
         """
+
         if transaction.verify_signature():
-            self.mempool.append(transaction)
-            print("Transaction added to mempool")
+            sender_address = transaction.sender_address
+            if sender_address == "Network":
+                self.mempool.append(transaction)
+                print("Reward transaction added to mempool.")
+                return
+
+            sender_balance = self.get_balance(transaction.sender_address)
+            if sender_balance >= transaction.amount:
+                self.mempool.append(transaction)
+                print("Transaction added to mempool")
+            else:
+                print(f"Senders balance is not sufficient {sender_balance}. Transaction rejected.")
         else:
             print("Invalid transaction signature. Transaction rejected.")
 
@@ -159,3 +170,23 @@ class Blockchain:
         print(f"Block {new_block.index} has been added to the blockchain.")
 
         self.mempool.clear()
+
+    def get_balance(self, address:str) -> float:
+        """
+        Calculates the balance of a given wallet address by aggregating transactions.
+        Simple account-based model.
+
+        Args:
+            address (str): The wallet address to check the balance for.
+
+        Returns:
+            float: The calculated balance.
+        """
+        balance = 0.0
+        for block in self.chain:
+            for tx in block.transactions:
+                if tx.recipient_address == address:
+                    balance += tx.amount
+                if tx.sender_address == address:
+                    balance -= tx.amount
+        return balance

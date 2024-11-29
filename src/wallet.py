@@ -2,6 +2,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from typing import Dict
 from .transactions import Transaction
+from .blockchain import Blockchain
 
 import hashlib
 
@@ -16,13 +17,14 @@ class Wallet:
         address (str): The user's wallet address derived from the public key.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, blockhain: Blockchain) -> None:
         """
         Initializes a new wallet by assigning public, private keys and generating an address.
         """
         self.private_key = self.generate_private_key()
         self.public_key = self.private_key.public_key()
         self.address = self.get_address()
+        self.blockchain = blockhain
 
     def generate_private_key(self) -> ec.EllipticCurvePrivateKey:
         """
@@ -81,3 +83,12 @@ class Wallet:
             'public_key': self.get_pem_public_key(),
             'address': self.address
         }
+    
+    def get_balance(self) -> float:
+        """
+        Retrieves the current balance of the wallet.
+
+        Returns:
+            float: The wallet's balance.
+        """
+        return self.blockchain.get_balance(self.address)
