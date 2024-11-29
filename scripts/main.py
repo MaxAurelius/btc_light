@@ -1,17 +1,38 @@
 from src.wallet import Wallet
 from src.transactions import Transaction
-from src.block import Block
 from src.blockchain import Blockchain
-
-from datetime import datetime, timezone
+from src.block import Block
+from datetime import datetime
 
 def main():
+    # Initialize blockchain with empty chain and mempool
+    blockchain = Blockchain(
+        chain=[],
+        difficulty=2,
+        mempool=[],
+        block_reward=50.0
+    )
+
+    # Create the genesis block
+    blockchain.create_genesis_block()
+
     # Initialize wallets for Alice and Bob
-    alice_wallet = Wallet()
-    bob_wallet = Wallet()
+    alice_wallet = Wallet(blockchain)
+    bob_wallet = Wallet(blockchain)
 
     print(f"Alice's Address: {alice_wallet.address}")
     print(f"Bob's Address: {bob_wallet.address}")
+
+    # Check initial balances
+    print(f"Alice's Balance: {alice_wallet.get_balance()} BTC")
+    print(f"Bob's Balance: {bob_wallet.get_balance()} BTC")
+
+    # Mine pending transactions (should include only the genesis block's transactions)
+    blockchain.mine_pending_transactions(miner_address=alice_wallet.address)
+
+    # Check balances after mining
+    print(f"Alice's Balance after mining: {alice_wallet.get_balance()} BTC")
+    print(f"Bob's Balance after mining: {bob_wallet.get_balance()} BTC")
 
     # Create a transaction from Alice to Bob
     transaction = Transaction(
@@ -23,27 +44,19 @@ def main():
     # Alice signs the transaction
     alice_wallet.sign_transaction(transaction)
 
-    # Verify the transaction's signature
-    is_valid = transaction.verify_signature()
-    print(f"Transaction valid: {is_valid}")
+    # Add the transaction to the blockchain's mempool
+    blockchain.add_transaction(transaction)
 
-    if is_valid:
-        print("Transaction has been successfully signed and verified.")
-    else:
-        print("Transaction signature is invalid.")
+    # Check balances before mining
+    print(f"Alice's Balance before mining: {alice_wallet.get_balance()} BTC")
+    print(f"Bob's Balance before mining: {bob_wallet.get_balance()} BTC")
 
-    # Create a block
-    block = Block(
-        index=1,
-        transactions=[transaction],
-        timestamp=datetime.now(timezone.utc).isoformat(),
-        prev_hash='0'
-    )
+    # Mine pending transactions
+    blockchain.mine_pending_transactions(miner_address=alice_wallet.address)
 
-    difficulty = 5
-    block.mine_block(difficulty)
-
-    print(f"Block hash {block.hash}")
+    # Check balances after mining
+    print(f"Alice's Balance after mining: {alice_wallet.get_balance()} BTC")
+    print(f"Bob's Balance after mining: {bob_wallet.get_balance()} BTC")
 
 if __name__ == "__main__":
     main()
