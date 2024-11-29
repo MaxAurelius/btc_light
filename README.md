@@ -97,7 +97,7 @@ Interact with the blockchain using the Command-Line Interface.
 2. **Run the Main Script**
 
    ```bash
-   python main.py
+   python3 -m scripts.main
    ```
 
 ### Available Commands
