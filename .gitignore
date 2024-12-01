@@ -72,3 +72,6 @@ desktop.ini
 
 # Local development overrides
 local_settings.py
+
+# json files
+*.json
