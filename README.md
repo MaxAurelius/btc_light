@@ -24,6 +24,14 @@
   - Key pair generation and address creation.
   - Balance inquiry and transaction creation via a Command-Line Interface (CLI).
 
+- **TO DO**
+
+  - [ ] To implement UTXO model
+  - [ ] To implement networking
+  - [ ] To implement peer discovery
+  - [ ] To implement smart contracts
+
+
 ### Installation
 
 1. **Clone the Repository**
