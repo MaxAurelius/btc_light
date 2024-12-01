@@ -1,9 +1,9 @@
-# btc_light
-
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**btc_light** is a simplified Bitcoin-like blockchain implementation in Python, developed for educational purposes. This project demystifies the core concepts of blockchain technology by building a minimal, functional version from scratch.
+# btc_light
+
+**btc_light** is a simplified Bitcoin-like blockchain implementation in Python, developed for educational purposes.
 
 ## Features
 
@@ -11,61 +11,25 @@
   - Block creation with index, transactions, timestamp, previous hash, nonce, and current hash.
   - Genesis block initialization.
   - Proof of Work (PoW) mining with adjustable difficulty.
-  
+
 - **Transactions**
   - Public-private key cryptography for secure transaction signing and verification.
-  - Unspent Transaction Output (UTXO) model for tracking balances.
-  
+  - Transaction signing ensures authenticity and integrity.
+
 - **Mining and Consensus**
   - Mining logic to solve PoW puzzles and add new blocks.
   - Static block rewards for miners.
-  
+
 - **Wallets**
   - Key pair generation and address creation.
   - Balance inquiry and transaction creation via a Command-Line Interface (CLI).
-
-## Project Structure
-
-```
-btc_light/
-│
-├── btc_light/                # Main package
-│   ├── __init__.py
-│   ├── blockchain.py         # Blockchain and block classes
-│   ├── transactions.py       # Transactions and UTXO management
-│   ├── mining.py             # Mining logic
-│   ├── network.py            # Networking and P2P communication
-│   ├── wallet.py             # Wallet and cryptographic key management
-│   └── utils.py              # Utility functions
-│
-├── tests/                    # Unit and integration tests
-│   ├── __init__.py
-│   ├── test_blockchain.py
-│   ├── test_transactions.py
-│   └── ...
-│
-├── scripts/                  # Scripts for running the application
-│   └── main.py               # CLI for user interaction
-│
-├── .gitignore                # Git ignore file
-├── requirements.txt          # Python dependencies
-├── README.md                 # Project documentation
-└── LICENSE                   # License information
-```
-
-## Getting Started
-
-### Prerequisites
-
-- **Python 3.8 or higher**: [Download Python](https://www.python.org/downloads/)
-- **Git**: [Install Git](https://git-scm.com/downloads)
 
 ### Installation
 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/btc_light.git
+   git clone https://github.com/MaxAurelius/btc_light.git
    cd btc_light
    ```
 
@@ -82,56 +46,102 @@ btc_light/
    pip install -r requirements.txt
    ```
 
-## Usage
+### Quick tests
 
-### Running the CLI
+- **test.sh**
 
-Interact with the blockchain using the Command-Line Interface.
-
-1. **Navigate to the Scripts Directory**
-
-   ```bash
-   cd scripts
-   ```
-
-2. **Run the Main Script**
-
-   ```bash
-   python3 -m scripts.main
-   ```
-
-### Available Commands
-
-- **View Blockchain**
-
-  Display all blocks in the blockchain.
+  Executes a sequence of CLI commands to create wallets, mine blocks, send transactions, and check balances.
 
   ```bash
-  python main.py view_chain
+  ./test.sh
+  ```
+
+- **clean.sh**
+
+  Cleans up the blockchain and wallet data by removing JSON files.
+
+  ```bash
+  ./clean.sh
+  ```
+
+## Usage
+
+Interact with the blockchain using the Command-Line Interface (CLI) or provided scripts.
+
+### Command-Line Interface (CLI)
+
+The CLI allows you to perform various operations such as creating wallets, checking balances, sending transactions, and mining blocks.
+
+#### Available Commands
+
+- **Create Wallet**
+
+  Create a new wallet with a unique label.
+
+  ```bash
+  python3 -m scripts.cli create_wallet <label>
+  ```
+
+  **Example:**
+
+  ```bash
+  python3 -m scripts.cli create_wallet Alice
   ```
 
 - **Check Balance**
 
-  View the balance of a specific wallet address.
+  Check the balance of a specific wallet.
 
   ```bash
-  python main.py check_balance --address <your_address>
+  python3 -m scripts.cli check_balance <label>
+  ```
+
+  **Example:**
+
+  ```bash
+  python3 -m scripts.cli check_balance Alice
   ```
 
 - **Send Transaction**
 
-  Create and broadcast a transaction from one address to another.
+  Send a specified amount from one wallet to another.
 
   ```bash
-  python main.py send_transaction --sender <sender_address> --recipient <recipient_address> --amount <amount>
+  python3 -m scripts.cli send_transaction <from_label> <to_label> <amount>
+  ```
+
+  **Example:**
+
+  ```bash
+  python3 -m scripts.cli send_transaction Alice Bob 20
   ```
 
 - **Mine Block**
 
-  Initiate mining to add pending transactions to the blockchain and receive rewards.
+  Mine pending transactions and receive block rewards.
 
   ```bash
-  python main.py mine_block --miner <miner_address>
+  python3 -m scripts.cli mine_block <miner_label>
+  ```
+
+  **Example:**
+
+  ```bash
+  python3 -m scripts.cli mine_block Alice
+  ```
+
+- **View Blockchain**
+
+  View the latest blocks in the blockchain.
+
+  ```bash
+  python3 -m scripts.cli view_chain [--num_blocks <number>]
+  ```
+
+  **Example:**
+
+  ```bash
+  python3 -m scripts.cli view_chain --num_blocks 10
   ```
 
 - **Validate Blockchain**
@@ -139,5 +149,7 @@ Interact with the blockchain using the Command-Line Interface.
   Verify the integrity and validity of the entire blockchain.
 
   ```bash
-  python main.py is_valid
+  python3 -m scripts.cli is_valid
   ```
+
+---
